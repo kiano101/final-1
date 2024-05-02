@@ -1,21 +1,21 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports System.Windows.Forms
 
 Public Class clientForm
     Inherits Form
 
-    Dim connectionString As String = "server=localhost;database=supermarket;uid=root;password=123456;"
-    Dim cart As New List(Of product)
+    Private connectionString As String = "server=localhost;database=supermarket;uid=root;password=123456;"
+    Private cart As New List(Of Product)
     Private _username As String
 
-    Public Class product
+    Public Class Product
         Public Property Name As String
         Public Property Price As Decimal
     End Class
 
     Public Sub New(username As String)
-        ' Initialize components (this call is required by the designer)
+        ' Initialize components
         InitializeComponent()
-
         ' Store the username
         _username = username
     End Sub
@@ -29,14 +29,13 @@ Public Class clientForm
             Dim dt As New DataTable()
             Using connection As New MySqlConnection(connectionString)
                 Dim commandText As String = "SELECT p_name, p_price FROM products;"
-                Dim command As New MySqlCommand(commandText, connection)
-
-                connection.Open()
-
-                Dim adapter As New MySqlDataAdapter(command)
-                adapter.Fill(dt)
+                Using command As New MySqlCommand(commandText, connection)
+                    connection.Open()
+                    Using adapter As New MySqlDataAdapter(command)
+                        adapter.Fill(dt)
+                    End Using
+                End Using
             End Using
-
             dgv.DataSource = dt
         Catch ex As Exception
             MessageBox.Show($"Error loading products: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -50,15 +49,11 @@ Public Class clientForm
     Private Sub btnCheckout_Click(sender As Object, e As EventArgs) Handles btnCheckout.Click
         If cart.Count = 0 Then
             MessageBox.Show("Your cart is empty. Please add items before checkout.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Exit Sub
+            Return
         End If
 
-        Try
-            Dim totalPrice As Decimal = cart.Sum(Function(p) p.Price)
-            SaveOrder(totalPrice)
-        Catch ex As Exception
-            MessageBox.Show($"Error processing checkout: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+        Dim totalPrice As Decimal = cart.Sum(Function(p) p.Price)
+        SaveOrder(totalPrice)
     End Sub
 
     Private Sub bckButton_Click(sender As Object, e As EventArgs) Handles bckButton.Click
@@ -70,7 +65,7 @@ Public Class clientForm
     Private Sub addBttn_Click(sender As Object, e As EventArgs) Handles addBttn.Click
         If dgv.SelectedRows.Count > 0 Then
             Dim selectedRow = dgv.SelectedRows(0)
-            Dim product As New product()
+            Dim product As New Product()
             product.Name = selectedRow.Cells("p_name").Value.ToString()
             product.Price = Convert.ToDecimal(selectedRow.Cells("p_price").Value)
             cart.Add(product)
@@ -86,27 +81,21 @@ Public Class clientForm
             Using connection As New MySqlConnection(connectionString)
                 connection.Open()
 
-                ' Insert the total and the username of the cashier into the orders table
-                Dim query As String = "INSERT INTO orders (total, user) VALUES (@TotalPrice, @Username); SELECT LAST_INSERT_ID();"
-                Dim command As New MySqlCommand(query, connection)
-                command.Parameters.AddWithValue("@TotalPrice", totalPrice)
-                command.Parameters.AddWithValue("@Username", _username)
-                Dim orderId As Integer = Convert.ToInt32(command.ExecuteScalar())
+                ' Combine all product names for insertion
+                Dim itemList As String = String.Join(", ", cart.Select(Function(p) p.Name))
 
-                ' Insert order details (products) into OrderDetails table
-                For Each product In cart
-                    query = "INSERT INTO OrderDetails (order_id, product_name, product_price) VALUES (@OrderId, @ProductName, @ProductPrice)"
-                    command = New MySqlCommand(query, connection)
-                    command.Parameters.AddWithValue("@OrderId", orderId)
-                    command.Parameters.AddWithValue("@ProductName", product.Name)
-                    command.Parameters.AddWithValue("@ProductPrice", product.Price)
+                ' Insert the total, user, and concatenated item names into the orders table
+                Dim query As String = "INSERT INTO orders (total, user, items) VALUES (@TotalPrice, @Username, @Items);"
+                Using command As New MySqlCommand(query, connection)
+                    command.Parameters.AddWithValue("@TotalPrice", totalPrice)
+                    command.Parameters.AddWithValue("@Username", _username)
+                    command.Parameters.AddWithValue("@Items", itemList)
                     command.ExecuteNonQuery()
-                Next
+                End Using
 
                 MessageBox.Show("Order placed successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End Using
 
-            ' Clear the cart after checkout
             cart.Clear()
             UpdateCartTextBox()
         Catch ex As Exception
