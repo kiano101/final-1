@@ -14,7 +14,7 @@ Public Class loginForm
             adminForm.Show()
             Me.Hide()
         ElseIf AuthenticateUser(username, password) Then
-            Dim clientForm As New clientForm()
+            Dim clientForm As New clientForm(username)
             clientForm.Show()
             Me.Hide()
         Else

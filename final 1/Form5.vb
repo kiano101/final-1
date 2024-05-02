@@ -1,14 +1,24 @@
 ﻿Imports MySql.Data.MySqlClient
 
 Public Class clientForm
+    Inherits Form
 
     Dim connectionString As String = "server=localhost;database=supermarket;uid=root;password=123456;"
     Dim cart As New List(Of product)
+    Private _username As String
 
     Public Class product
         Public Property Name As String
         Public Property Price As Decimal
     End Class
+
+    Public Sub New(username As String)
+        ' Initialize components (this call is required by the designer)
+        InitializeComponent()
+
+        ' Store the username
+        _username = username
+    End Sub
 
     Private Sub clientForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadProducts()
@@ -76,9 +86,11 @@ Public Class clientForm
             Using connection As New MySqlConnection(connectionString)
                 connection.Open()
 
-                Dim query As String = "INSERT INTO orders (total) VALUES (@TotalPrice); SELECT LAST_INSERT_ID();"
+                ' Insert the total and the username of the cashier into the orders table
+                Dim query As String = "INSERT INTO orders (total, user) VALUES (@TotalPrice, @Username); SELECT LAST_INSERT_ID();"
                 Dim command As New MySqlCommand(query, connection)
                 command.Parameters.AddWithValue("@TotalPrice", totalPrice)
+                command.Parameters.AddWithValue("@Username", _username)
                 Dim orderId As Integer = Convert.ToInt32(command.ExecuteScalar())
 
                 ' Insert order details (products) into OrderDetails table
