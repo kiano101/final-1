@@ -29,6 +29,7 @@ Partial Class clientForm
         cartTB = New TextBox()
         totalTB = New TextBox()
         Label1 = New Label()
+        Button1 = New Button()
         CType(dgv, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
@@ -95,11 +96,21 @@ Partial Class clientForm
         Label1.TabIndex = 6
         Label1.Text = "Total :"
         ' 
+        ' Button1
+        ' 
+        Button1.Location = New Point(429, 409)
+        Button1.Name = "Button1"
+        Button1.Size = New Size(94, 29)
+        Button1.TabIndex = 7
+        Button1.Text = "Clear"
+        Button1.UseVisualStyleBackColor = True
+        ' 
         ' clientForm
         ' 
         AutoScaleDimensions = New SizeF(8F, 20F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(800, 450)
+        Controls.Add(Button1)
         Controls.Add(Label1)
         Controls.Add(totalTB)
         Controls.Add(cartTB)
@@ -121,4 +132,5 @@ Partial Class clientForm
     Friend WithEvents cartTB As TextBox
     Friend WithEvents totalTB As TextBox
     Friend WithEvents Label1 As Label
+    Friend WithEvents Button1 As Button
 End Class

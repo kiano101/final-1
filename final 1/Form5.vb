@@ -102,4 +102,9 @@ Public Class clientForm
             MessageBox.Show($"Error saving order: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        cart.Clear()
+        UpdateCartTextBox()
+    End Sub
 End Class
