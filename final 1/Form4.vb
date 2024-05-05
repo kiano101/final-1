@@ -7,7 +7,7 @@ Public Class orders
         Try
             Dim dt As New DataTable()
             Using connection As New MySqlConnection(connectionString)
-                Dim commandText As String = "SELECT idorders, user, items, date FROM orders;"
+                Dim commandText As String = "SELECT * FROM orders;"
                 Dim command As New MySqlCommand(commandText, connection)
 
                 connection.Open()
@@ -29,5 +29,9 @@ Public Class orders
 
     Private Sub dgv_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgv.CellContentClick
 
+    End Sub
+
+    Private Sub orders_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        LoadData()
     End Sub
 End Class

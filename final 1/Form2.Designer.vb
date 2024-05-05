@@ -28,13 +28,14 @@ Partial Class adminForm
         ToolStripButton2 = New ToolStripButton()
         ToolStripButton3 = New ToolStripButton()
         Label1 = New Label()
+        ToolStripButton4 = New ToolStripButton()
         ToolStrip1.SuspendLayout()
         SuspendLayout()
         ' 
         ' ToolStrip1
         ' 
         ToolStrip1.ImageScalingSize = New Size(20, 20)
-        ToolStrip1.Items.AddRange(New ToolStripItem() {ToolStripButton1, ToolStripButton2, ToolStripButton3})
+        ToolStrip1.Items.AddRange(New ToolStripItem() {ToolStripButton1, ToolStripButton2, ToolStripButton3, ToolStripButton4})
         ToolStrip1.Location = New Point(0, 0)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New Size(800, 27)
@@ -77,6 +78,15 @@ Partial Class adminForm
         Label1.TabIndex = 1
         Label1.Text = "Welcome to the admin panel !"
         ' 
+        ' ToolStripButton4
+        ' 
+        ToolStripButton4.DisplayStyle = ToolStripItemDisplayStyle.Text
+        ToolStripButton4.Image = CType(resources.GetObject("ToolStripButton4.Image"), Image)
+        ToolStripButton4.ImageTransparentColor = Color.Magenta
+        ToolStripButton4.Name = "ToolStripButton4"
+        ToolStripButton4.Size = New Size(48, 24)
+        ToolStripButton4.Text = "Users"
+        ' 
         ' adminForm
         ' 
         AutoScaleDimensions = New SizeF(8F, 20F)
@@ -97,4 +107,5 @@ Partial Class adminForm
     Friend WithEvents ToolStripButton2 As ToolStripButton
     Friend WithEvents ToolStripButton3 As ToolStripButton
     Friend WithEvents Label1 As Label
+    Friend WithEvents ToolStripButton4 As ToolStripButton
 End Class

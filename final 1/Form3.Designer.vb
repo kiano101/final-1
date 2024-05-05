@@ -79,9 +79,9 @@ Partial Class products
         Label2.AutoSize = True
         Label2.Location = New Point(57, 85)
         Label2.Name = "Label2"
-        Label2.Size = New Size(49, 20)
+        Label2.Size = New Size(48, 20)
         Label2.TabIndex = 5
-        Label2.Text = "price :"
+        Label2.Text = "Price :"
         ' 
         ' bckButton
         ' 

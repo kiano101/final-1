@@ -16,7 +16,13 @@ Public Class adminForm
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
         Dim loginForm As New loginForm()
         loginForm.Show()
-        Me.Close()
+        Me.Hide()
 
+    End Sub
+
+    Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click
+        Dim addUsers As New addUsers()
+        addUsers.Show()
+        Me.Hide()
     End Sub
 End Class

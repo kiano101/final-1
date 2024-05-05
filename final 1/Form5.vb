@@ -14,9 +14,7 @@ Public Class clientForm
     End Class
 
     Public Sub New(username As String)
-        ' Initialize components
         InitializeComponent()
-        ' Store the username
         _username = username
     End Sub
 
@@ -81,10 +79,8 @@ Public Class clientForm
             Using connection As New MySqlConnection(connectionString)
                 connection.Open()
 
-                ' Combine all product names for insertion
                 Dim itemList As String = String.Join(", ", cart.Select(Function(p) p.Name))
 
-                ' Insert the total, user, and concatenated item names into the orders table
                 Dim query As String = "INSERT INTO orders (total, user, items) VALUES (@TotalPrice, @Username, @Items);"
                 Using command As New MySqlCommand(query, connection)
                     command.Parameters.AddWithValue("@TotalPrice", totalPrice)
@@ -92,8 +88,6 @@ Public Class clientForm
                     command.Parameters.AddWithValue("@Items", itemList)
                     command.ExecuteNonQuery()
                 End Using
-
-                MessageBox.Show("Order placed successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End Using
 
             cart.Clear()
