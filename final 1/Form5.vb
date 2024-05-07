@@ -67,7 +67,6 @@ Public Class clientForm
             product.Name = selectedRow.Cells("p_name").Value.ToString()
             product.Price = Convert.ToDecimal(selectedRow.Cells("p_price").Value)
             cart.Add(product)
-            MessageBox.Show($"Added {product.Name} to cart.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             UpdateCartTextBox()
         Else
             MessageBox.Show("Please select a product to add to the cart.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -91,6 +90,7 @@ Public Class clientForm
             End Using
 
             cart.Clear()
+            MessageBox.Show($"Thank You For Your Purchase.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             UpdateCartTextBox()
         Catch ex As Exception
             MessageBox.Show($"Error saving order: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
